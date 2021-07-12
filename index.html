@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        -ms-flex-align: center;
+      }
+      input {
+        width: 10rem;
+        height: 1rem;
+      }
+      li {
+        font-size: 2rem;
+        margin: 1rem;
+      }
+      img {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        display: none;
+      }
+      ul {
+        display: none;
+      }
+      .inp {
+        position: absolute;
+        left: 26rem;
+        top: 1rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="inp">
+      <input
+        type="number"
+        placeholder="Enter Number"
+        max="10"
+        min="1"
+        name=""
+        id="n"
+      />
+      <input
+        placeholder="Enter API Url"
+        type="text"
+        id="url"
+        value="https://reqres.in/api/users"
+      />
+      <button id="get">get user data</button>
+    </div>
+
+    <div class="container">
+      <ul>
+        <li id="id"></li>
+        <li id="firstName"></li>
+        <li id="lastName"></li>
+        <li id="email">Email: <a href="mailto:someone@yoursite.com"></a></li>
+        <li><img id="img" src="" alt="" /></li>
+      </ul>
+    </div>
+
+    <script>
+      let url = "https://reqres.in/api/users";
+
+      //syntax
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+
+      //using
+      function getUsers(url) {
+        fetch(url).then((e) => e.json().then((e) => console.log(e)));
+      }
+
+      getUsers(url);
+
+      /////////////////////
+      let id = document.querySelector("#id");
+      let fName = document.querySelector("#firstName");
+      let lName = document.querySelector("#lastName");
+      let email = document.querySelector("#email");
+      let emailLink = document.querySelector("a");
+      let img = document.querySelector("#img");
+      let inputN = document.querySelector("#n");
+      let inputUrl = document.querySelector("#url");
+      let btnGet = document.querySelector("#get");
+
+      ////
+      btnGet.addEventListener("click", () => {
+        getUser(inputUrl.value, inputN.value);
+      });
+
+      function getUser(link, num) {
+        fetch(`${link}\\${num}`)
+          .then((response) => response.json())
+          .then((json) => {
+            document.querySelector("ul").style.display = "block";
+            id.textContent = "id: " + json.data.id;
+            fName.textContent = "First Name: " + json.data.first_name;
+            lName.textContent = "Last Name: " + json.data.last_name;
+            emailLink.textContent = json.data.email;
+            emailLink.href = `mailto:${json.data.email}`;
+            img.style.display = "block";
+            img.src = json.data.avatar;
+            console.log(json);
+          });
+      }
+    </script>
+  </body>
+</html>
